@@ -5,30 +5,25 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
-public class Maxsum {
+public class TSP1 {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(br.readLine());
 		
 		for(int testcase=0; testcase<T; testcase++){
 			// INPUT
-			// CALCULATE
-			int N = Integer.parseInt(br.readLine());
-			
-			StringTokenizer st = new StringTokenizer(br.readLine());
-			int sum = 0;
-			int max=0;
+			int N = Integer.parseInt(br.readLine());	// N<=8
+			double[][] map = new double[N][N];
+			StringTokenizer st;
 			for(int i=0; i<N; i++){
-				int temp = Integer.parseInt(st.nextToken());
-				sum += temp;
-				if(sum<0){
-					sum = 0;
+				st = new StringTokenizer(br.readLine());
+				for(int j=0; j<N; j++){
+					map[i][j] = Double.parseDouble(st.nextToken());
 				}
-				if(sum>max)
-					max = sum;
 			}
+			
+			// CALCULATE
 			// OUTPUT
-			System.out.println(max);
 		}
 	}
 }

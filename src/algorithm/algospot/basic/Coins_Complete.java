@@ -6,7 +6,7 @@ import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.StringTokenizer;
 
-public class Coins {
+public class Coins_Complete {
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		int T = Integer.parseInt(br.readLine());	// 1<=T<=100
@@ -26,7 +26,7 @@ public class Coins {
 			// CALCULATE
 			for(int i=1; i<=C; i++){
 				for(int j=0; j<=M; j++){
-					// ÀÓÀÇÀÇ ÀÜµ· coins[i]°¡ Æ÷ÇÔ µÉ ¶§ + ÀÓÀÇÀÇ ÀÜµ· coins[i]°¡ Æ÷ÇÔµÇÁö ¾ÊÀ» ¶§
+					// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Üµï¿½ coins[i]ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ + ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Üµï¿½ coins[i]ï¿½ï¿½ ï¿½ï¿½ï¿½Ôµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 					if(i==0 || j==0)
 						count[i][j] = 1;
 					else if(j>=coins[i])
