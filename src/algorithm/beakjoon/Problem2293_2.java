@@ -9,6 +9,7 @@ import java.util.StringTokenizer;
 public class Problem2293_2 {
 	static int[][] W;
 	static int N;
+	static int[][] mem;
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		// INPUT
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -24,6 +25,7 @@ public class Problem2293_2 {
 		}
 		
 		// CALCULATE
+		mem = new int[N][1<<N];
 		int visited = 0;
 		int min = Integer.MAX_VALUE;
 		for(int i=0; i<N; i++){
@@ -39,19 +41,18 @@ public class Problem2293_2 {
 	public static int TSP(int startIndex, int curIndex, int visited){
 		// index에 방문함을 표시
 		visited += Math.pow(2, curIndex);
-				
+		
 		// 모두 방문했으면, 시작점으로 돌아감
 		if(Integer.bitCount(visited) == N){
+			mem[curIndex][visited] = W[curIndex][startIndex];
 			return W[curIndex][startIndex];
 		}
-		
 		int result = Integer.MAX_VALUE;
 		for(int i=0; i<N; i++){
 			// 방문했으면 continue
 			if(curIndex==i || ((int)Math.pow(2, i)&visited) !=0){
 				continue;
 			}
-			
 			// 방문안했을 경우
 			else{
 				int pathLength = W[curIndex][i] + TSP(startIndex, i, visited);
@@ -60,7 +61,7 @@ public class Problem2293_2 {
 				}	
 			}
 		}
-		
+		mem[curIndex][visited] = result;
 		return result;
 	}
 }
