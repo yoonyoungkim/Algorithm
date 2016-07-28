@@ -6,32 +6,59 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 
 public class Problem2293 {
-		public static void main(String[] args) throws IOException {
+	static int N;
+	static int[][] W;
+	static int[] visited;
+	static int result = Integer.MAX_VALUE;
+	public static void main(String[] args) throws NumberFormatException, IOException {
+		// INPUT
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-		StringTokenizer st = new StringTokenizer(br.readLine());
-		int n = Integer.parseInt(st.nextToken());
-		int k = Integer.parseInt(st.nextToken());
+		N = Integer.parseInt(br.readLine());
+		W = new int[N][N];
 		
-		int[] value = new int[n+1];
-		for(int i=1; i<=n; i++){
-			value[i] = Integer.parseInt(br.readLine());
-		}
-		
-		int[][] map = new int[k+1][n+1];
-		for(int i=1; i<=k; i++){
-			for(int j=1; j<=n; j++){
-				if(i<value[j]){
-					map[i][j] = map[i][j-1];
-				}else{
-					if(i==value[j]){
-						map[i][j] = map[i][j-1]+1;
-					}else{
-						map[i][j] = map[i][j-1]+map[i-value[j]][j];
-					}
-				}
+		StringTokenizer st;
+		for(int i=0; i<N; i++){
+			st = new StringTokenizer(br.readLine());
+			for(int j=0; j<N; j++){
+				W[i][j] = Integer.parseInt(st.nextToken());
 			}
 		}
 		
-		System.out.print(map[k][n]);
+		// CALCULATE
+		for(int i=0; i<N; i++){
+			visited = new int[N];
+			visited[i] = 1;
+			backtracking(i, i, 0);
+		}
+		
+		
+		// OUTPUT
+		System.out.println(result);
+	}
+	
+	public static void backtracking(int startIndex, int index, int sum){
+		for(int i=0; i<N; i++){
+			if(index!=i && visited[i]==0){
+				visited[i]=1;
+				sum += W[index][i];
+				
+				boolean isVisitedAll = true;
+				for(int j=0; j<N ;j++){
+					if(visited[j]==0){
+						isVisitedAll = false;
+						break;
+					}
+				}
+				if(isVisitedAll){
+					sum += W[i][startIndex];
+					if(result>sum)
+						result = sum;
+				}
+					
+				backtracking(startIndex, i, sum);
+				sum -= W[index][i];
+				visited[i]=0;
+			}
+		}
 	}
 }
