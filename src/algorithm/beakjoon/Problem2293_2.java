@@ -10,6 +10,8 @@ public class Problem2293_2 {
 	static int[][] W;
 	static int N;
 	static int[][] mem;
+	static int IMPOSSIBLE = Integer.MAX_VALUE;
+	static int[] arr;
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		// INPUT
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
@@ -25,40 +27,40 @@ public class Problem2293_2 {
 		}
 		
 		// CALCULATE
+		arr = new int[N];
 		mem = new int[N][1<<N];
 		int visited = 0;
-		int min = Integer.MAX_VALUE;
+		int result = Integer.MAX_VALUE;
+		int chooseIndex=-1;
 		for(int i=0; i<N; i++){
-			int result = TSP(i, i, visited);
-			if(min>result)
-				min = result;
+			result = Math.min(result, TSP(i, i, visited|1<<i));
 		}
+		arr[0] = chooseIndex;
 		
 		// OUTPUT
-		System.out.println(min);
+		System.out.println(result);
+		System.out.println(Arrays.toString(arr));
 	}
 	
 	public static int TSP(int startIndex, int curIndex, int visited){
 		// index에 방문함을 표시
-		visited += Math.pow(2, curIndex);
 		
 		// 모두 방문했으면, 시작점으로 돌아감
-		if(Integer.bitCount(visited) == N){
+		if(visited==(1<<N)-1){
 			mem[curIndex][visited] = W[curIndex][startIndex];
 			return W[curIndex][startIndex];
 		}
 		int result = Integer.MAX_VALUE;
+		int chooseIndex = -1;
 		for(int i=0; i<N; i++){
 			// 방문했으면 continue
-			if(curIndex==i || ((int)Math.pow(2, i)&visited) !=0){
+			if(curIndex==i || (visited&1<<i) !=0){
 				continue;
 			}
 			// 방문안했을 경우
 			else{
-				int pathLength = W[curIndex][i] + TSP(startIndex, i, visited);
-				if(pathLength<result){
-					result = pathLength;
-				}	
+
+				result = Math.min(result, W[curIndex][i] + TSP(startIndex, i, visited|1<<i));
 			}
 		}
 		mem[curIndex][visited] = result;
