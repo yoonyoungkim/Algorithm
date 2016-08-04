@@ -1,24 +1,24 @@
 package algorithm.beakjoon;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.Arrays;
 import java.util.StringTokenizer;
 
 public class Problem2293_2 {
-	static int[][] W;
+
 	static int N;
+	static int[][] W;
+	static int IMPOSSIBLE = Integer.MAX_VALUE;
 	static int[][] mem;
+	static int result = IMPOSSIBLE;
 	public static void main(String[] args) throws NumberFormatException, IOException {
 		// INPUT
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		N = Integer.parseInt(br.readLine());
 		W = new int[N][N];
-		
 		StringTokenizer st;
-		for(int i=0; i<N ;i++){
-			st = new StringTokenizer(br.readLine());
+		for(int i=0; i<N; i++){
+			st = new  StringTokenizer(br.readLine());
 			for(int j=0; j<N; j++){
 				W[i][j] = Integer.parseInt(st.nextToken());
 			}
@@ -26,42 +26,37 @@ public class Problem2293_2 {
 		
 		// CALCULATE
 		mem = new int[N][1<<N];
-		int visited = 0;
-		int min = Integer.MAX_VALUE;
-		for(int i=0; i<N; i++){
-			int result = TSP(i, i, visited);
-			if(min>result)
-				min = result;
-		}
+		result = Math.min(result, TSP(0, 0, 1));
 		
 		// OUTPUT
-		System.out.println(min);
+		System.out.println(result);
 	}
 	
-	public static int TSP(int startIndex, int curIndex, int visited){
-		// index에 방문함을 표시
-		visited += Math.pow(2, curIndex);
-		
-		// 모두 방문했으면, 시작점으로 돌아감
-		if(Integer.bitCount(visited) == N){
-			mem[curIndex][visited] = W[curIndex][startIndex];
-			return W[curIndex][startIndex];
+	public static int TSP(int startIndex, int index, int visited){
+		// memorizaton 된 경우
+		if(mem[index][visited]>0){
+			return mem[index][visited];
 		}
-		int result = Integer.MAX_VALUE;
+		
+		// 모든 노드를 방문했을 경우
+		if(visited == ((1<<N)-1)){
+			if(W[index][startIndex]>0)
+				return W[index][startIndex];
+			else
+				return IMPOSSIBLE;
+		}
+			
+		int result = IMPOSSIBLE;
 		for(int i=0; i<N; i++){
-			// 방문했으면 continue
-			if(curIndex==i || ((int)Math.pow(2, i)&visited) !=0){
+			// 이미 방문한 노드에거나 갈수 없는 길인 경우
+			if((visited&(1<<i))!=0 || W[index][i]==0){
 				continue;
 			}
-			// 방문안했을 경우
-			else{
-				int pathLength = W[curIndex][i] + TSP(startIndex, i, visited);
-				if(pathLength<result){
-					result = pathLength;
-				}	
-			}
+			
+			result = Math.min(result, W[index][i] + TSP(startIndex, i, visited|1<<i));
 		}
-		mem[curIndex][visited] = result;
+		mem[index][visited] = result;
 		return result;
 	}
+
 }
